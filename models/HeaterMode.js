@@ -1,7 +1,7 @@
 /* jshint indent: 2 */
 
 module.exports = function(sequelize, DataTypes) {
-  return sequelize.define('mode', {
+  return sequelize.define('HeaterMode', {
     id: {
       type: DataTypes.INTEGER,
       allowNull: false,
@@ -20,5 +20,11 @@ module.exports = function(sequelize, DataTypes) {
       type: DataTypes.FLOAT,
       allowNull: true
     }
+  }, 
+  {
+    timestamps: false
+  }, 
+  {
+    tableName: 'mode'
   });
 };

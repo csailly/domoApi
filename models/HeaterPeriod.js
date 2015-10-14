@@ -1,7 +1,7 @@
 /* jshint indent: 2 */
 
 module.exports = function(sequelize, DataTypes) {
-  return sequelize.define('periode', {
+  return sequelize.define('HeaterPeriod', {
     id: {
       type: DataTypes.INTEGER,
       allowNull: false,
@@ -36,5 +36,11 @@ module.exports = function(sequelize, DataTypes) {
       type: DataTypes.INTEGER,
       allowNull: true
     }
+  }, 
+  {
+    timestamps: false
+  }, 
+  {
+    tableName: 'periode'
   });
 };

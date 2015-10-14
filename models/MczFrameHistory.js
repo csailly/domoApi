@@ -1,7 +1,7 @@
 /* jshint indent: 2 */
 
 module.exports = function(sequelize, DataTypes) {
-  return sequelize.define('histoTrameMcz', {
+  return sequelize.define('MczFrameHistory', {
     sendDate: {
       field: 'dateEnvoi',
       type: DataTypes.DATE,
@@ -37,5 +37,11 @@ module.exports = function(sequelize, DataTypes) {
       type: DataTypes.TEXT,
       allowNull: true
     }
+  }, 
+  {
+    timestamps: false
+  }, 
+  {
+    tableName: 'histoTrameMcz'
   });
 };

@@ -1,7 +1,7 @@
 /* jshint indent: 2 */
 
 module.exports = function(sequelize, DataTypes) {
-  return sequelize.define('histo_temp', {
+  return sequelize.define('TemperatureHistory', {
     date: {
       field: 'date',
       type: DataTypes.DATE,
@@ -21,5 +21,11 @@ module.exports = function(sequelize, DataTypes) {
       type: DataTypes.INTEGER,
       allowNull: true
     }
+  }, 
+  {
+    timestamps: false
+  }, 
+  {
+    tableName: 'histo_temp'
   });
 };

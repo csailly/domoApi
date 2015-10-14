@@ -1,7 +1,7 @@
 /* jshint indent: 2 */
 
 module.exports = function(sequelize, DataTypes) {
-  return sequelize.define('parametrage', {
+  return sequelize.define('Parameter', {
     code: {
       type: DataTypes.STRING,
       allowNull: false,
@@ -26,5 +26,11 @@ module.exports = function(sequelize, DataTypes) {
       type: DataTypes.STRING,
       allowNull: true
     }
+  }, 
+  {
+    timestamps: false
+  }, 
+  {
+    tableName: 'parametrage'
   });
 };
