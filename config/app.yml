@@ -1,0 +1,8 @@
+default:
+	database:
+		dialect: "sqlite"
+		storage: "./db.development.sqlite"
+	server:
+		port: 3000
+test:
+production:		
