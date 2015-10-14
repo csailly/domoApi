@@ -37,11 +37,9 @@ module.exports = function(sequelize, DataTypes) {
       type: DataTypes.TEXT,
       allowNull: true
     }
-  }, 
+  },
   {
-    timestamps: false
-  }, 
-  {
+    timestamps: false,
     tableName: 'histoTrameMcz'
   });
 };

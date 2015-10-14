@@ -1,21 +1,17 @@
-/* jshint indent: 2 */
-
-module.exports = function(sequelize, DataTypes) {
+module.exports = function (sequelize, DataTypes) {
   return sequelize.define('Account', {
-    login: {
-      type: DataTypes.STRING,
-      allowNull: false,
-      primaryKey: true
+      login: {
+        type: DataTypes.STRING,
+        allowNull: false,
+        primaryKey: true
+      },
+      password: {
+        type: DataTypes.STRING,
+        allowNull: false
+      }
     },
-    password: {
-      type: DataTypes.STRING,
-      allowNull: false
-    }
-  }, 
-  {
-    timestamps: false
-  }, 
-  {
-    tableName: 'ACCOUNTS'
-  });
+    {
+      timestamps: false,
+      tableName: 'ACCOUNTS'
+    });
 };

@@ -21,11 +21,9 @@ module.exports = function(sequelize, DataTypes) {
       type: DataTypes.INTEGER,
       allowNull: true
     }
-  }, 
+  },
   {
-    timestamps: false
-  }, 
-  {
+    timestamps: false,
     tableName: 'histo_temp'
   });
 };

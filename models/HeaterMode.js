@@ -20,11 +20,9 @@ module.exports = function(sequelize, DataTypes) {
       type: DataTypes.FLOAT,
       allowNull: true
     }
-  }, 
+  },
   {
-    timestamps: false
-  }, 
-  {
+    timestamps: false,
     tableName: 'mode'
   });
 };
