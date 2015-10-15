@@ -1,7 +1,9 @@
 'use strict';
 
 function logErrors(err, req, res, next) {
-  console.error(err.stack);
+  if (typeof err === 'string')
+    err = new Error(err);
+  console.error('logErrors', err.toString());
   next(err);
 }
 

@@ -1,9 +1,8 @@
 'use strict';
 
 function errorHandler(err, req, res, next) {
-  res.status(500);
-  res.send("An error occured !");
-  //res.render('error', { error: err });
+  console.error('lastErrors response');
+  res.status(500).send(err.toString());
 }
 
 module.exports = errorHandler;
