@@ -5,14 +5,16 @@ module.exports = function(sequelize, DataTypes) {
     id: {
       type: DataTypes.INTEGER,
       allowNull: false,
-      primaryKey: true
+      primaryKey: true,
+      autoIncrement: true
     },
     label: {
       field: 'libelle',
       type: DataTypes.STRING,
       allowNull: true
     },
-    cons: {
+    order: {
+      field: 'cons',
       type: DataTypes.FLOAT,
       allowNull: true
     },
