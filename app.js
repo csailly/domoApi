@@ -8,6 +8,7 @@ var express = require('express');        // call express
 var app = express();                 // define our app using express
 var bodyParser = require('body-parser');
 var compress = require('compression');
+var expressValidator = require('express-validator');
 
 //Configure compression for response
 app.use(compress());
@@ -15,6 +16,8 @@ app.use(compress());
 // this will let us get the data from a POST
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(bodyParser.json());
+
+app.use(expressValidator()); // this line must be immediately after express.bodyParser()!
 
 // MIDDLEWARE
 // =============================================================================
@@ -36,7 +39,7 @@ app.use('/api/v1/mczFrameHistory', routes.mczFrameHistory);
 app.use('/api/v1/parameter', routes.parameter);
 app.use('/api/v1/temperatureHistory', routes.temperatureHistory);
 
-app.get('*', function(req, res){
+app.get('*', function (req, res) {
   res.status(404).send('Not Found');
 });
 
