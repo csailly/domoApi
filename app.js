@@ -22,12 +22,12 @@ app.use(expressValidator()); // this line must be immediately after express.body
 // MIDDLEWARE
 // =============================================================================
 // middleware to use for all requests
-app.use(require('./middlewares/logger'));
+app.use(require('./app/middlewares/logger'));
 
 
 // ROUTES FOR OUR API
 // =============================================================================
-var routes = require('./routes');
+var routes = require('./app/routes');
 
 
 //All routes are prefixed with /api/vx
@@ -45,9 +45,9 @@ app.get('*', function (req, res) {
 
 // ERRORS HANDLING
 // =============================================================================
-app.use(require('./middlewares/logErrors'));
-app.use(require('./middlewares/clientErrorHandler'));
-app.use(require('./middlewares/errorHandler'));
+app.use(require('./app/middlewares/logErrors'));
+app.use(require('./app/middlewares/clientErrorHandler'));
+app.use(require('./app/middlewares/errorHandler'));
 
 // START THE SERVER
 // =============================================================================

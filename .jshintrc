@@ -1,20 +1,3 @@
 {
-  "strict": true,
-  "bitwise": true,
-  "curly": true,
-  "eqeqeq": true,
-  "latedef": false,
-  "noarg": true,
-  "undef": true,
-  "unused": true,
-  "validthis": true,
-  "jasmine": true,
-  "globals": {
-    "angular": false,
-    "_": false,
-    "inject": false,
-    "module": false,
-    "moment": false,
-    "numeral": false
-  }
+  "strict": true
 }

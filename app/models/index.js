@@ -4,7 +4,7 @@ var fs        = require("fs");
 var path      = require("path");
 var Sequelize = require("sequelize");
 var env       = process.env.NODE_ENV || "development";
-var config    = require('yaml-config').readConfig('./config/app.yml');
+var config    = require('yaml-config').readConfig('./app/config/app.yml');
 var sequelize = new Sequelize(null, null, null, config.database);
 var db        = {};
 
