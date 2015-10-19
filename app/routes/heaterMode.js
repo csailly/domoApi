@@ -6,7 +6,7 @@ var router = express.Router();
 var util = require('util');
 
 
-function findAllHeaderMode(req, res, next) {
+function findAllHeaterMode(req, res, next) {
   models.HeaterMode.findAll()
     .then(function (heaterModes) {
       res.send(heaterModes);
@@ -16,7 +16,7 @@ function findAllHeaderMode(req, res, next) {
     });
 }
 
-function createHeaderMode(req, res, next) {
+function createHeaterMode(req, res, next) {
 
   // VALIDATION
   req.checkBody('label', 'Invalid label').notEmpty().isAlphanumeric();
@@ -148,10 +148,10 @@ function deleteHeaterMode(req, res, next) {
 }
 
 //Get all HeaterMode
-router.get('/', findAllHeaderMode);
+router.get('/', findAllHeaterMode);
 
 //Create a HeaterMode
-router.post('/', createHeaderMode);
+router.post('/', createHeaterMode);
 
 //Get a single HeaterMode
 router.get('/:heaterMode_id', findHeaterModeById);
