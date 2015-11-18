@@ -5,6 +5,25 @@ var express = require('express');
 var router = express.Router();
 var util = require('util');
 
+//Get all HeaterMode
+router.get('/', findAllHeaterMode);
+
+//Create a HeaterMode
+router.post('/', createHeaterMode);
+
+//Get a single HeaterMode
+router.get('/:heaterMode_id', findHeaterModeById);
+
+//Update a HeaterMode
+router.put('/:heaterMode_id', updateHeaterMode);
+
+//Delete a HeaterMode
+router.delete('/:heaterMode_id', deleteHeaterMode);
+
+
+module.exports = router;
+
+//---------------------------
 
 function findAllHeaterMode(req, res, next) {
   models.HeaterMode.findAll()
@@ -147,19 +166,6 @@ function deleteHeaterMode(req, res, next) {
     });
 }
 
-//Get all HeaterMode
-router.get('/', findAllHeaterMode);
 
-//Create a HeaterMode
-router.post('/', createHeaterMode);
 
-//Get a single HeaterMode
-router.get('/:heaterMode_id', findHeaterModeById);
 
-//Update a HeaterMode
-router.put('/:heaterMode_id', updateHeaterMode);
-
-//Delete a HeaterMode
-router.delete('/:heaterMode_id', deleteHeaterMode);
-
-module.exports = router;

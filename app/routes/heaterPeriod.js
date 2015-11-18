@@ -5,6 +5,24 @@ var express = require('express');
 var router = express.Router();
 var util = require('util');
 
+//Get all HeaterPeriod
+router.get('/', findAllHeaterPeriod);
+
+//Create a HeaterPeriod
+router.post('/', createHeaterPeriod);
+
+//Get a single HeaterPeriod
+router.get('/:heaterPeriod_id', findHeaterPeriodById);
+
+//Update a HeaterPeriod
+router.put('/:heaterPeriod_id', updateHeaterPeriod);
+
+//Delete a HeaterPeriod
+router.delete('/:heaterPeriod_id', deleteHeaterPeriod);
+
+module.exports = router;
+
+//---------------------------
 
 function findAllHeaterPeriod(req, res, next){
   models.HeaterPeriod.findAll()
@@ -31,20 +49,3 @@ function updateHeaterPeriod(req, res, next){
 function deleteHeaterPeriod(req, res, next){
   res.status(501).send("Not yet implemented");
 }
-
-//Get all HeaterPeriod
-router.get('/', findAllHeaterPeriod);
-
-//Create a HeaterPeriod
-router.post('/', createHeaterPeriod);
-
-//Get a single HeaterPeriod
-router.get('/:heaterPeriod_id', findHeaterPeriodById);
-
-//Update a HeaterPeriod
-router.put('/:heaterPeriod_id', updateHeaterPeriod);
-
-//Delete a HeaterPeriod
-router.delete('/:heaterPeriod_id', deleteHeaterPeriod);
-
-module.exports = router;

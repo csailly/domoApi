@@ -31,13 +31,20 @@ var routes = require('./app/routes');
 
 
 //All routes are prefixed with /api/vx
-
 app.use('/api/v1/account', routes.account);
 app.use('/api/v1/heaterMode', routes.heaterMode);
 app.use('/api/v1/heaterPeriod', routes.heaterPeriod);
 app.use('/api/v1/mczFrameHistory', routes.mczFrameHistory);
 app.use('/api/v1/parameter', routes.parameter);
 app.use('/api/v1/temperatureHistory', routes.temperatureHistory);
+
+app.get('/infos', function (req, res) {
+  res.status(200).send({
+    "name": "domo-api",
+    "version": "1.0.0",
+    "description": "Api for domotic application"
+  });
+});
 
 app.get('*', function (req, res) {
   res.status(404).send('Not Found');
