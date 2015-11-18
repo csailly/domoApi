@@ -9,6 +9,7 @@ var app = express();                 // define our app using express
 var bodyParser = require('body-parser');
 var compress = require('compression');
 var expressValidator = require('express-validator');
+var moment = require('moment');
 
 //Configure compression for response
 app.use(compress());
@@ -17,7 +18,17 @@ app.use(compress());
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(bodyParser.json());
 
-app.use(expressValidator()); // this line must be immediately after express.bodyParser()!
+// this line must be immediately after express.bodyParser()!
+app.use(expressValidator({
+  customValidators: {
+    isDate: function(value) {
+      return moment(value, 'DD/MM/YYYY', true).isValid();
+    },
+    isTime: function(value) {
+      return moment(value, 'HH:mm', true).isValid();
+    }
+  }
+}));
 
 // MIDDLEWARE
 // =============================================================================
@@ -33,7 +44,7 @@ var routes = require('./app/routes');
 //All routes are prefixed with /api/vx
 app.use('/api/v1/account', routes.account);
 app.use('/api/v1/heaterMode', routes.heaterMode);
-app.use('/api/v1/heaterPeriod', routes.heaterPeriod);
+  app.use('/api/v1/heaterPeriod', routes.heaterPeriod);
 app.use('/api/v1/mczFrameHistory', routes.mczFrameHistory);
 app.use('/api/v1/parameter', routes.parameter);
 app.use('/api/v1/temperatureHistory', routes.temperatureHistory);

@@ -43,9 +43,9 @@ function createHeaterMode(req, res, next) {
   req.checkBody('max', 'Invalid max').notEmpty().isInt();
 
   // SANITIZATION
-  req.sanitizeBody('label').toBoolean();
+/*  req.sanitizeBody('label').toBoolean();
   req.sanitizeBody('order').toBoolean();
-  req.sanitizeBody('max').toBoolean();
+  req.sanitizeBody('max').toBoolean();*/
 
   var errors = req.validationErrors();
   if (errors) {
@@ -67,7 +67,7 @@ function findHeaterModeById(req, res, next) {
   req.checkParams('heaterMode_id', 'Invalid id').notEmpty().isInt();
 
   // SANITIZATION
-  req.sanitizeParams('heaterMode_id').toBoolean();
+/*  req.sanitizeParams('heaterMode_id').toBoolean();*/
 
   var errors = req.validationErrors();
   if (errors) {
@@ -100,10 +100,10 @@ function updateHeaterMode(req, res, next) {
   req.checkBody('max', 'Invalid max').notEmpty().isInt();
 
   // SANITIZATION
-  req.sanitizeParams('id').toBoolean();
+/*  req.sanitizeParams('id').toBoolean();
   req.sanitizeBody('label').toBoolean();
   req.sanitizeBody('order').toBoolean();
-  req.sanitizeBody('max').toBoolean();
+  req.sanitizeBody('max').toBoolean();*/
 
   var errors = req.validationErrors();
   if (errors) {
@@ -140,7 +140,7 @@ function deleteHeaterMode(req, res, next) {
   req.checkParams('heaterMode_id', 'Invalid id').notEmpty().isInt();
 
   // SANITIZATION
-  req.sanitizeParams('heaterMode_id').toBoolean();
+/*  req.sanitizeParams('heaterMode_id').toBoolean();*/
 
   var errors = req.validationErrors();
   if (errors) {
@@ -165,7 +165,3 @@ function deleteHeaterMode(req, res, next) {
       next(error);
     });
 }
-
-
-
-

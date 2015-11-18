@@ -5,11 +5,12 @@ module.exports = function(sequelize, DataTypes) {
     id: {
       type: DataTypes.INTEGER,
       allowNull: false,
-      primaryKey: true
+      primaryKey: true,
+      autoIncrement: true
     },
     day: {
       field: 'jour',
-      type: DataTypes.STRING,
+      type: DataTypes.INTEGER,
       allowNull: true
     },
     startDate: {
@@ -24,12 +25,12 @@ module.exports = function(sequelize, DataTypes) {
     },
     startHour: {
       field: 'heureDebut',
-      type: DataTypes.DATE,
+      type: DataTypes.TIME,
       allowNull: true
     },
     endHour: {
       field: 'heureFin',
-      type: DataTypes.DATE,
+      type: DataTypes.TIME,
       allowNull: true
     },
     modeId: {
