@@ -3,11 +3,10 @@
 var models = require('../models');
 var express = require('express');
 var router = express.Router();
+var parameterService = require('../services/parameter.service.js');
 
 router.get('/', findAll);
-
 router.put('/:code', updateParameter);
-
 router.get('/:code', findById);
 
 module.exports = router;
@@ -15,7 +14,7 @@ module.exports = router;
 //---------------------------
 
 function findAll(req, res, next) {
-  models.Parameter.findAll()
+  parameterService.findAll()
     .then(function (parameters) {
       res.send(parameters);
     })
@@ -40,25 +39,10 @@ function updateParameter(req, res, next) {
   }
 
   //All seems ok, let's update !!
-  models.Parameter.find({
-    where: {
-      code: req.params.code
-    }
-  })
-    .then(function (parameter) {
-      if (parameter !== null) {
-        parameter.update({
-          type: req.body.type,
-          value: req.body.value,
-          description: req.body.description,
-          values: req.body.values
-        })
-          .then(function () {
-            res.send(parameter);
-          })
-          .catch(function (error) {
-            next(error);
-          });
+  parameterService.update(req.params.code, req.body.type, req.body.value, req.body.description, req.body.values)
+    .then(function (heaterPeriod) {
+      if (heaterPeriod !== null) {
+        res.send(heaterPeriod);
       } else {
         res.status(204).end();
       }
@@ -69,7 +53,7 @@ function updateParameter(req, res, next) {
 
 }
 
-function findById(req, res, next){
+function findById(req, res, next) {
   // VALIDATION
   req.checkParams('code', 'Invalid code').notEmpty();
 
@@ -79,11 +63,7 @@ function findById(req, res, next){
     return;
   }
 
-  models.Parameter.find({
-    where: {
-      code: req.params.code
-    }
-  })
+  parameterService.findById(req.params.code)
     .then(function (parameter) {
       if (parameter !== null) {
         res.send(parameter);

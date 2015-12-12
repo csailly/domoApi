@@ -15,20 +15,20 @@ module.exports = function(sequelize, DataTypes) {
     },
     startDate: {
       field: 'dateDebut',
-      type: DataTypes.DATE,
+      type: DataTypes.DATEONLY,
       allowNull: true
     },
     endDate: {
       field: 'dateFin',
-      type: DataTypes.DATE,
+      type: DataTypes.DATEONLY,
       allowNull: true
     },
-    startHour: {
+    startTime: {
       field: 'heureDebut',
       type: DataTypes.TIME,
       allowNull: true
     },
-    endHour: {
+    endTime: {
       field: 'heureFin',
       type: DataTypes.TIME,
       allowNull: true

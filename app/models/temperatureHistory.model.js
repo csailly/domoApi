@@ -9,14 +9,15 @@ module.exports = function(sequelize, DataTypes) {
     },
     time: {
       field: 'heure',
-      type: DataTypes.DATE,
+      type: DataTypes.TIME,
       allowNull: true
     },
     temp: {
+      field: 'temp',
       type: DataTypes.FLOAT,
       allowNull: true
     },
-    sensor: {
+    sensorId: {
       field: 'sonde',
       type: DataTypes.INTEGER,
       allowNull: true

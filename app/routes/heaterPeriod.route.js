@@ -1,16 +1,18 @@
 'use strict';
 
-var models = require('../models');
 var express = require('express');
 var router = express.Router();
-var util = require('util');
 var moment = require('moment');
+var heaterPeriodService = require('../services/heaterPeriod.service.js');
 
 //Get all HeaterPeriod
 router.get('/', findAllHeaterPeriod);
 
 //Create a HeaterPeriod
 router.post('/', createHeaterPeriod);
+
+//Find current Heater period
+router.get('/current', findCurrent);
 
 //Get a single HeaterPeriod
 router.get('/:heaterPeriod_id', findHeaterPeriodById);
@@ -21,12 +23,16 @@ router.put('/:heaterPeriod_id', updateHeaterPeriod);
 //Delete a HeaterPeriod
 router.delete('/:heaterPeriod_id', deleteHeaterPeriod);
 
+//Update current Mode
+router.post('/currentMode/', updateCurrentMode);
+
+
 module.exports = router;
 
 //---------------------------
 
 function findAllHeaterPeriod(req, res, next) {
-  models.HeaterPeriod.findAll()
+  heaterPeriodService.findAll()
     .then(function (heaterModes) {
       res.send(heaterModes);
     })
@@ -40,17 +46,9 @@ function createHeaterPeriod(req, res, next) {
   req.checkBody('day', 'Invalid day').optional().isInt();
   req.checkBody('startDate', 'Invalid startDate').optional().isDate();
   req.checkBody('endDate', 'Invalid endDate').optional().isDate();
-  req.checkBody('startHour', 'Invalid startHour').notEmpty().isTime();
-  req.checkBody('endHour', 'Invalid endHour').notEmpty().isTime();
+  req.checkBody('startTime', 'Invalid startTime').notEmpty().isTime();
+  req.checkBody('endTime', 'Invalid endTime').notEmpty().isTime();
   req.checkBody('modeId', 'Invalid modeId').notEmpty().isInt();
-
-  // SANITIZATION
-  /*  req.sanitizeBody('day').toBoolean();
-   req.sanitizeBody('startDate').toBoolean();
-   req.sanitizeBody('endDate').toBoolean();
-   req.sanitizeBody('startHour').toBoolean();
-   req.sanitizeBody('endHour').toBoolean();
-   req.sanitizeBody('modeId').toBoolean();*/
 
   var errors = req.validationErrors();
   if (errors) {
@@ -66,7 +64,7 @@ function createHeaterPeriod(req, res, next) {
   }
 
   //All seems ok, go to create !!
-  models.HeaterPeriod.create(buildEntityFromRequest(req))
+  heaterPeriodService.create(buildEntityFromRequest(req))
     .then(function (heaterPeriod) {
       res.status(201).send(heaterPeriod)
     })
@@ -85,11 +83,7 @@ function findHeaterPeriodById(req, res, next) {
     return;
   }
 
-  models.HeaterPeriod.find({
-    where: {
-      id: req.params.heaterPeriod_id
-    }
-  })
+  heaterPeriodService.findById(req.params.heaterPeriod_id)
     .then(function (heaterPeriod) {
       if (heaterPeriod !== null) {
         res.send(heaterPeriod);
@@ -108,17 +102,9 @@ function updateHeaterPeriod(req, res, next) {
   req.checkBody('day', 'Invalid day').optional().isInt();
   req.checkBody('startDate', 'Invalid startDate').optional().isDate();
   req.checkBody('endDate', 'Invalid endDate').optional().isDate();
-  req.checkBody('startHour', 'Invalid startHour').notEmpty().isTime();
-  req.checkBody('endHour', 'Invalid endHour').notEmpty().isTime();
+  req.checkBody('startTime', 'Invalid startTime').notEmpty().isTime();
+  req.checkBody('endTime', 'Invalid endTime').notEmpty().isTime();
   req.checkBody('modeId', 'Invalid modeId').notEmpty().isInt();
-
-  // SANITIZATION
-  /*  req.sanitizeBody('day').toBoolean();
-   req.sanitizeBody('startDate').toBoolean();
-   req.sanitizeBody('endDate').toBoolean();
-   req.sanitizeBody('startHour').toBoolean();
-   req.sanitizeBody('endHour').toBoolean();
-   req.sanitizeBody('modeId').toBoolean();*/
 
   var errors = req.validationErrors();
   if (errors) {
@@ -134,20 +120,10 @@ function updateHeaterPeriod(req, res, next) {
   }
 
   //All seems ok, let's update !!
-  models.HeaterPeriod.find({
-    where: {
-      id: req.params.heaterPeriod_id
-    }
-  })
+  heaterPeriodService.update(req.params.heaterPeriod_id, buildEntityFromRequest(req))
     .then(function (heaterPeriod) {
       if (heaterPeriod !== null) {
-        heaterPeriod.update(buildEntityFromRequest(req))
-          .then(function () {
-            res.send(heaterPeriod);
-          })
-          .catch(function (error) {
-            next(error);
-          });
+        res.send(heaterPeriod);
       } else {
         res.status(204).end();
       }
@@ -161,20 +137,13 @@ function deleteHeaterPeriod(req, res, next) {
   // VALIDATION
   req.checkParams('heaterPeriod_id', 'Invalid id').notEmpty().isInt();
 
-  // SANITIZATION
-  /*  req.sanitizeParams('heaterPeriod_id').toBoolean();*/
-
   var errors = req.validationErrors();
   if (errors) {
     res.status(400).send({message: 'There have been validation errors: ', errors: errors});
     return;
   }
 
-  models.HeaterPeriod.destroy({
-    where: {
-      id: req.params.heaterPeriod_id
-    }
-  })
+  heaterPeriodService.delete(req.params.heaterPeriod_id)
     .then(function (affectedRows) {
       if (affectedRows === 0) {
         res.status(204).end();
@@ -188,49 +157,69 @@ function deleteHeaterPeriod(req, res, next) {
     });
 }
 
-function buildEntityFromRequest(req){
+function findCurrent(req, res, next) {
+  heaterPeriodService.findCurrent()
+    .then(function (heaterPeriod) {
+      if (heaterPeriod) {
+        res.send(heaterPeriod);
+      } else {
+        res.status(204).end();
+      }
+    })
+    .catch(function (error) {
+      next(error);
+    });
+}
+
+function updateCurrentMode(req, res, next) {
+  heaterPeriodService.setCurrentMode(req.body.modeId)
+    .then(function (heaterPeriod) {
+      res.send(heaterPeriod);
+    })
+    .catch(function (error) {
+      next(error);
+    });
+}
+
+function buildEntityFromRequest(req) {
   var entity = {
-    startHour: req.body.startHour,
-    endHour: req.body.endHour,
+    startTime: req.body.startTime,
+    endTime: req.body.endTime,
     modeId: req.body.modeId
   };
   if (req.body.day) {
     entity.day = req.body.day;
   } else {
-    var startDate = moment(req.body.startDate, 'DD/MM/YYYY');
-    startDate.utcOffset(0);
-    startDate.hour(0);
-    entity.startDate = startDate.toISOString();
+    var startDate = moment(req.body.startDate + "+0000", ['DD/MM/YYYYZ', 'YYYYMMDDZ']);
+    entity.startDate = startDate.utc().format();
 
-    var endDate = moment(req.body.endDate, 'DD/MM/YYYY');
-    endDate.utcOffset(0);
-    endDate.hour(0);
-    entity.endDate = endDate.toISOString();
+    var endDate = moment(req.body.endDate + "+0000", ['DD/MM/YYYYZ', 'YYYYMMDDZ']);
+    entity.endDate = endDate.utc().format();
   }
   return entity;
 }
 
-function validateEntityFromRequest(req){
+function validateEntityFromRequest(req) {
   var errors = undefined;
 
   //Check Hours
-  if (moment(req.body.endHour, 'HH:MM').diff(moment(req.body.startHour, 'HH:MM')) < 0) {
+  if (moment(req.body.endTime, 'HH:MM').diff(moment(req.body.startTime, 'HH:MM')) < 0) {
     errors = errors || [];
     errors.push({
-      "param": "startHour",
-      "msg": "endHour must be posterior to startHour",
-      "value": req.body.startHour + " - " + req.body.endHour
+      "param": "startTime",
+      "msg": "endTime must be posterior to startTime",
+      "value": req.body.startTime + " - " + req.body.endTime
     });
     errors.push({
-      "param": "endHour",
-      "msg": "endHour must be posterior to startHour",
-      "value": req.body.startHour + " - " + req.body.endHour
+      "param": "endTime",
+      "msg": "endTime must be posterior to startTime",
+      "value": req.body.startTime + " - " + req.body.endTime
     });
   }
 
   //Check Dates
   if (!req.body.day) {
-    if (!req.body.startDate || req.body.endDate) {
+    if (!req.body.startDate || !req.body.endDate) {
       errors = errors || [];
       errors.push({
         "param": "startDate",
@@ -248,7 +237,7 @@ function validateEntityFromRequest(req){
         "value": req.body.day
       });
 
-    } else if (moment(req.body.endDate, 'DD/MM/YYYY').diff(moment(req.body.startDate, 'DD/MM/YYYY')) < 0) {
+    } else if (moment(req.body.endDate, ['DD/MM/YYYY', 'YYYYMMDD']).diff(moment(req.body.startDate, ['DD/MM/YYYY', 'YYYYMMDD'])) < 0) {
       errors = errors || [];
       errors.push({
         "param": "startDate",

@@ -3,7 +3,6 @@
 var models = require('../models');
 var express = require('express');
 var router = express.Router();
-var util = require('util');
 
 //Get all HeaterMode
 router.get('/', findAllHeaterMode);
