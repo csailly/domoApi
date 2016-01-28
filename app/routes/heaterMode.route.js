@@ -54,7 +54,7 @@ function createHeaterMode(req, res, next) {
 
   models.HeaterMode.create({label: req.body.label, order: req.body.order, max: req.body.max})
     .then(function (heaterMode) {
-      res.status(201).send(heaterMode)
+      res.status(201).send(heaterMode);
     })
     .catch(function (error) {
       next(error);

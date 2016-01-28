@@ -1,4 +1,4 @@
-'ue strict';
+'use strict';
 
 function clientErrorHandler(err, req, res, next) {
   if (req.xhr) {

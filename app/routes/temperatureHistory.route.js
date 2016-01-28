@@ -49,7 +49,7 @@ function create(req, res, next) {
     temp: req.body.temp
   })
     .then(function (history) {
-      res.status(201).send(history)
+      res.status(201).send(history);
     })
     .catch(function (error) {
       next(error);

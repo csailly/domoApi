@@ -1,6 +1,7 @@
 'use strict';
 
 var model = require('../models').Parameter;
+var Q = require('q');
 
 module.exports = {
   findAll: findAll,
@@ -18,10 +19,10 @@ function findAll() {
 
 function findById(id) {
   return model.find({
-    where: {
-      code: id
-    }
-  })
+      where: {
+        code: id
+      }
+    })
     .then(function (parameter) {
       return parameter;
     });
@@ -35,12 +36,11 @@ function update(id, entity) {
     })
     .then(function (parameter) {
       if (parameter !== null) {
-        return parameter.update(entity)
-          .then(function (parameter) {
-            return parameter;
-          });
+        return parameter.update(entity);
       } else {
-        return null;
+        return Q.when();
       }
+    }).then(function (parameter) {
+      return parameter;
     });
 }

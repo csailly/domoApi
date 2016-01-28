@@ -7,6 +7,7 @@ var jshint = require('gulp-jshint');
 gulp.task('lint', function () {
   gulp.src('./app/**/*.js')
     .pipe(jshint())
+    .pipe(jshint.reporter('default', { verbose: true }));
 });
 
 gulp.task('develop', ['lint'], function () {
@@ -14,6 +15,6 @@ gulp.task('develop', ['lint'], function () {
     , ext: 'js'
     , tasks: ['lint'] })
     .on('restart', function () {
-      console.log('restarted!')
+      console.log('restarted!');
     })
 });

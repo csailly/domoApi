@@ -1,6 +1,5 @@
 'use strict';
 
-var Q = require('q');
 var parameterDao = require('../dao/parameter.dao');
 
 module.exports = {
@@ -9,25 +8,15 @@ module.exports = {
   findById: findById
 };
 
-
 //---------------------------
 function findById(id) {
-  var deferred = Q.defer();
-
-  parameterDao.findById(id)
+  return parameterDao.findById(id)
     .then(function (parameter) {
-      deferred.resolve(parameter);
-    })
-    .catch(function (e) {
-      deferred.reject(e);
+      return parameter;
     });
-
-  return deferred.promise;
 }
 
 function update(id, newType, newValue, newDescription, newValues) {
-  var deferred = Q.defer();
-
   var entity = {};
   if (newType !== undefined) {
     entity.type = newType;
@@ -42,28 +31,15 @@ function update(id, newType, newValue, newDescription, newValues) {
     entity.values = newValues;
   }
 
-
-  parameterDao.update(id, entity)
+  return parameterDao.update(id, entity)
     .then(function (updatedEntity) {
-      deferred.resolve(updatedEntity);
-    })
-    .catch(function (e) {
-      deferred.reject(e);
+      return updatedEntity;
     });
-
-  return deferred.promise;
 }
 
 function findAll() {
-  var deferred = Q.defer();
-
-  parameterDao.findAll()
+  return parameterDao.findAll()
     .then(function (parameters) {
-      deferred.resolve(parameters);
-    })
-    .catch(function (e) {
-      deferred.reject(e);
+      return parameters;
     });
-
-  return deferred.promise;
 }

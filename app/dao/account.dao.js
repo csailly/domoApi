@@ -2,16 +2,14 @@
 
 var models = require('../models');
 
-
-module.exports =  {
+module.exports = {
   findAll: findAll,
   findByLogin: findByLogin
 };
 
 //---------------------------
 
-
-function findAll(){
+function findAll() {
   return models.Account.findAll();
 }
 
@@ -20,7 +18,7 @@ function findByLogin(login) {
     where: {
       login: login
     }
-  }).then(function(credentials){
+  }).then(function (credentials) {
     return credentials;
   });
 }

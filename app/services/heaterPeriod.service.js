@@ -17,138 +17,76 @@ module.exports = {
 
 //---------------------------
 function findById(idHeaterPeriod) {
-  var deferred = Q.defer();
-
-  heaterPeriodDao.findById(idHeaterPeriod)
+  return heaterPeriodDao.findById(idHeaterPeriod)
     .then(function (heaterPeriod) {
-      deferred.resolve(heaterPeriod);
-    })
-    .catch(function (e) {
-      deferred.reject(e);
+      return heaterPeriod;
     });
-
-  return deferred.promise;
 }
 
 
 function create(entity) {
-  var deferred = Q.defer();
-
-  heaterPeriodDao.create(entity)
+  return heaterPeriodDao.create(entity)
     .then(function (heaterPeriod) {
-      deferred.resolve(heaterPeriod);
-    })
-    .catch(function (e) {
-      deferred.reject(e);
+      return heaterPeriod;
     });
-
-  return deferred.promise;
 }
 
 function update(idHeaterPeriod, entity) {
-  var deferred = Q.defer();
-  heaterPeriodDao.update(idHeaterPeriod, entity)
+  return heaterPeriodDao.update(idHeaterPeriod, entity)
     .then(function (updatedEntity) {
-      deferred.resolve(updatedEntity);
-    })
-    .catch(function (e) {
-      deferred.reject(e);
+      return updatedEntity;
     });
-
-  return deferred.promise;
 }
 
 function deletePeriod(idHeaterPeriod) {
-  var deferred = Q.defer();
-
-  heaterPeriodDao.deletePeriod(idHeaterPeriod)
+  return heaterPeriodDao.delete(idHeaterPeriod)
     .then(function (affectedRows) {
-      deferred.resolve(affectedRows);
-    })
-    .catch(function (e) {
-      deferred.reject(e);
+      return affectedRows;
     });
-
-  return deferred.promise;
 }
 
 function findAll() {
-  var deferred = Q.defer();
-
-  heaterPeriodDao.findAll()
+  return heaterPeriodDao.findAll()
     .then(function (heaterPeriods) {
-      deferred.resolve(heaterPeriods);
-    })
-    .catch(function (e) {
-      deferred.reject(e);
+      return heaterPeriods;
     });
-
-  return deferred.promise;
 }
 
 function findCurrent() {
-  var deferred = Q.defer();
-
-  heaterPeriodDao.findCurrent()
+  return heaterPeriodDao.findCurrent()
     .then(function (heaterPeriod) {
-      deferred.resolve(heaterPeriod);
-    })
-    .catch(function (e) {
-      deferred.reject(e);
+      return heaterPeriod;
     });
-
-  return deferred.promise;
 }
 
 function setCurrentMode(modeId) {
-  var deferred = Q.defer();
-
   var dateNow = moment().hour(0).minute(0).second(0).millisecond(0).format('YYYYMMDD');
   dateNow = moment(dateNow + "+0000", 'YYYYMMDDZ').utc().format();
   var timeNow = moment().format("HH:mm");
 
-  findCurrent()
-    .then(function (currentHeaterPeriod) {
+  var currentHeaterPeriod;
+  return findCurrent()
+    .then(function (current) {
+      currentHeaterPeriod = current;
       if (!currentHeaterPeriod.day || currentHeaterPeriod.startDate === currentHeaterPeriod.endDate) {
-        console.log("- 2 -");
-
         //1° update current period to end now
-        heaterPeriodDao.update(currentHeaterPeriod.id, {endTime: timeNow})
-          .then(function () {
-            console.log("- 3 -");
-
-            heaterPeriodDao.create({
-              startDate: dateNow,
-              endDate: dateNow,
-              startTime: timeNow,
-              endTime: currentHeaterPeriod.endTime,
-              modeId: modeId
-            })
-              .then(function (heaterPeriod) {
-                console.log("- 4 -");
-
-                deferred.resolve(heaterPeriod);
-              });
-          });
+        return update(currentHeaterPeriod.id, {endTime: timeNow});
       } else {
-        console.log("- 5 -");
-
-        //2° create new period starting now and ending at the currentPeriod end
-        heaterPeriodDao.create({
-          startDate: dateNow,
-          endDate: dateNow,
-          startTime: timeNow,
-          endTime: currentHeaterPeriod.endTime,
-          modeId: modeId
-        })
-          .then(function (heaterPeriod) {
-            console.log("- 6 -");
-
-            deferred.resolve(heaterPeriod);
-          });
+        return Q.when();
       }
-
+    })
+    //2° create new period starting now and ending at the currentPeriod end
+    .then(function () {
+      return create({
+        startDate: dateNow,
+        endDate: dateNow,
+        startTime: timeNow,
+        endTime: currentHeaterPeriod.endTime,
+        modeId: modeId
+      });
+    })
+    .then(function (heaterPeriod) {
+      return heaterPeriod;
     });
 
-  return deferred.promise;
 }

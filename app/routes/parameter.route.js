@@ -1,6 +1,5 @@
 'use strict';
 
-var models = require('../models');
 var express = require('express');
 var router = express.Router();
 var parameterService = require('../services/parameter.service.js');
@@ -13,7 +12,7 @@ module.exports = router;
 
 //---------------------------
 
-function findAll(req, res, next) {
+function findAll(req, res) {
   parameterService.findAll()
     .then(function (parameters) {
       res.send(parameters);

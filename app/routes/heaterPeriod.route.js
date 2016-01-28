@@ -66,7 +66,7 @@ function createHeaterPeriod(req, res, next) {
   //All seems ok, go to create !!
   heaterPeriodService.create(buildEntityFromRequest(req))
     .then(function (heaterPeriod) {
-      res.status(201).send(heaterPeriod)
+      res.status(201).send(heaterPeriod);
     })
     .catch(function (error) {
       next(error);
@@ -200,7 +200,7 @@ function buildEntityFromRequest(req) {
 }
 
 function validateEntityFromRequest(req) {
-  var errors = undefined;
+  var errors;
 
   //Check Hours
   if (moment(req.body.endTime, 'HH:MM').diff(moment(req.body.startTime, 'HH:MM')) < 0) {

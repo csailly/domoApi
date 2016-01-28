@@ -26,102 +26,57 @@ function setForced(order) {
       return updatedEntity;
     });
 
-  var deferred = Q.defer();
+  return Q.allSettled([promise1, promise2])
+    .spread(function (diskVal, cloudVal) {
+      return [diskVal, cloudVal];
+    });
 
-
-  Q.allSettled([promise1, promise2]).spread(function (diskVal, cloudVal) {
-    deferred.resolve([diskVal, cloudVal]);
-  });
-
-  return deferred.promise;
 }
 
 function setManual(start) {
-  var deferred = Q.defer();
-
-  parameterDao.update('ORDRE_MANU', {value: (start ? "ON" : "OFF")})
+  return parameterDao.update('ORDRE_MANU', {value: (start ? "ON" : "OFF")})
     .then(function (updatedEntity) {
-      deferred.resolve(updatedEntity);
-    })
-    .catch(function (e) {
-      deferred.reject(e);
+      return updatedEntity;
     });
-
-  return deferred.promise;
 }
 
 function updateForcedSetPointTemp(temp) {
-  var deferred = Q.defer();
-
-  parameterDao.update('TEMP_CONSIGNE_MARCHE_FORCEE', {value: temp})
+  return parameterDao.update('TEMP_CONSIGNE_MARCHE_FORCEE', {value: temp})
     .then(function (updatedEntity) {
-      deferred.resolve(updatedEntity);
-    })
-    .catch(function (e) {
-      deferred.reject(e);
+      return updatedEntity;
     });
-
-  return deferred.promise;
 }
 
 function updateForcedMaxTemp(temp) {
-  var deferred = Q.defer();
-
-  parameterDao.update('TEMP_MAXI_MARCHE_FORCEE', {value: temp})
+  return parameterDao.update('TEMP_MAXI_MARCHE_FORCEE', {value: temp})
     .then(function (updatedEntity) {
-      deferred.resolve(updatedEntity);
-    })
-    .catch(function (e) {
-      deferred.reject(e);
+      return updatedEntity;
     });
-
-  return deferred.promise;
 }
 
 function updateConfiguration(configValue) {
-  var deferred = Q.defer();
-
-  parameterDao.update('POELE_CONFIG', {value: configValue})
+  return parameterDao.update('POELE_CONFIG', {value: configValue})
     .then(function () {
-      parameterDao.findById('POELE_ETAT')
-        .then(function (parameter) {
-          parameterDao.update('ORDRE_MANU', {value: parameter.value})
-            .then(function () {
-              deferred.resolve(configValue);
-            })
-        })
+      return parameterDao.findById('POELE_ETAT');
     })
-    .catch(function (e) {
-      deferred.reject(e);
+    .then(function (parameter) {
+      return parameterDao.update('ORDRE_MANU', {value: parameter.value});
+    })
+    .then(function () {
+      return configValue;
     });
-
-  return deferred.promise;
 }
 
-function getConfiguration(){
-  var deferred = Q.defer();
-
-  parameterDao.findById('POELE_CONFIG')
-    .then(function(parameter){
-      deferred.resolve(parameter);
-    })
-    .catch(function (e) {
-      deferred.reject(e);
+function getConfiguration() {
+  return parameterDao.findById('POELE_CONFIG')
+    .then(function (parameter) {
+      return parameter;
     });
-
-  return deferred.promise;
 }
 
-function getState(){
-  var deferred = Q.defer();
-
-  parameterDao.findById('POELE_ETAT')
-    .then(function(parameter){
-      deferred.resolve(parameter);
-    })
-    .catch(function (e) {
-      deferred.reject(e);
+function getState() {
+  return parameterDao.findById('POELE_ETAT')
+    .then(function (parameter) {
+      return parameter;
     });
-
-  return deferred.promise;
 }

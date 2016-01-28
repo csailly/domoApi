@@ -1,6 +1,5 @@
 'use strict';
 
-var Q = require('q');
 var accountDao = require('../dao/account.dao');
 
 module.exports = {
@@ -14,15 +13,8 @@ function findAll() {
 }
 
 function authenticate(login, password) {
-  var deferred = Q.defer();
-
-  accountDao.findByLogin(login)
+  return accountDao.findByLogin(login)
     .then(function (credentials) {
-      deferred.resolve(credentials && (credentials.password === password));
-    })
-    .catch(function (e) {
-      deferred.reject(e);
+      return (credentials && (credentials.password === password));
     });
-
-  return deferred.promise;
 }
