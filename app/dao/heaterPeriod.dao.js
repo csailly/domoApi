@@ -2,6 +2,7 @@
 
 var models = require('../models');
 var moment = require('moment');
+var Q = require('q');
 
 module.exports = {
   create: create,
@@ -18,17 +19,11 @@ function findById(idHeaterPeriod) {
       where: {
         id: idHeaterPeriod
       }
-    })
-    .then(function (heaterPeriod) {
-      return heaterPeriod;
     });
 }
 
 function create(entity) {
-  return models.HeaterPeriod.create(entity)
-    .then(function (heaterPeriod) {
-      return heaterPeriod;
-    });
+  return models.HeaterPeriod.create(entity);
 }
 
 function update(idHeaterPeriod, entity) {
@@ -40,12 +35,8 @@ function update(idHeaterPeriod, entity) {
     .then(function (heaterPeriod) {
       if (heaterPeriod !== null) {
         return heaterPeriod.update(entity);
-      } else {
-        return null;
       }
-    })
-    .then(function (heaterPeriod) {
-      return heaterPeriod;
+      return Q.when();
     });
 }
 
@@ -54,17 +45,11 @@ function deletePeriod(idHeaterPeriod) {
       where: {
         id: idHeaterPeriod
       }
-    })
-    .then(function (affectedRows) {
-      return affectedRows;
     });
 }
 
 function findAll() {
-  return models.HeaterPeriod.findAll()
-    .then(function (heaterModes) {
-      return heaterModes;
-    });
+  return models.HeaterPeriod.findAll();
 }
 
 function findCurrent() {
@@ -104,8 +89,5 @@ function findCurrent() {
       //Sort to get period with current date first
       //@see https://github.com/sequelize/sequelize/issues/4810
       order: [['dateDebut', 'DESC'], ['dateFin', 'ASC']]
-    })
-    .then(function (heaterPeriod) {
-      return heaterPeriod;
     });
 }

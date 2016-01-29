@@ -25,38 +25,23 @@ function findById(idHeaterPeriod) {
 
 
 function create(entity) {
-  return heaterPeriodDao.create(entity)
-    .then(function (heaterPeriod) {
-      return heaterPeriod;
-    });
+  return heaterPeriodDao.create(entity);
 }
 
 function update(idHeaterPeriod, entity) {
-  return heaterPeriodDao.update(idHeaterPeriod, entity)
-    .then(function (updatedEntity) {
-      return updatedEntity;
-    });
+  return heaterPeriodDao.update(idHeaterPeriod, entity);
 }
 
 function deletePeriod(idHeaterPeriod) {
-  return heaterPeriodDao.delete(idHeaterPeriod)
-    .then(function (affectedRows) {
-      return affectedRows;
-    });
+  return heaterPeriodDao.delete(idHeaterPeriod);
 }
 
 function findAll() {
-  return heaterPeriodDao.findAll()
-    .then(function (heaterPeriods) {
-      return heaterPeriods;
-    });
+  return heaterPeriodDao.findAll();
 }
 
 function findCurrent() {
-  return heaterPeriodDao.findCurrent()
-    .then(function (heaterPeriod) {
-      return heaterPeriod;
-    });
+  return heaterPeriodDao.findCurrent();
 }
 
 function setCurrentMode(modeId) {
@@ -84,9 +69,6 @@ function setCurrentMode(modeId) {
         endTime: currentHeaterPeriod.endTime,
         modeId: modeId
       });
-    })
-    .then(function (heaterPeriod) {
-      return heaterPeriod;
     });
 
 }

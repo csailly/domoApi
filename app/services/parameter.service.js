@@ -31,15 +31,9 @@ function update(id, newType, newValue, newDescription, newValues) {
     entity.values = newValues;
   }
 
-  return parameterDao.update(id, entity)
-    .then(function (updatedEntity) {
-      return updatedEntity;
-    });
+  return parameterDao.update(id, entity);
 }
 
 function findAll() {
-  return parameterDao.findAll()
-    .then(function (parameters) {
-      return parameters;
-    });
+  return parameterDao.findAll();
 }

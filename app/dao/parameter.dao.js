@@ -11,10 +11,7 @@ module.exports = {
 
 //---------------------------
 function findAll() {
-  return model.findAll()
-    .then(function (parameters) {
-      return parameters;
-    });
+  return model.findAll();
 }
 
 function findById(id) {
@@ -22,9 +19,6 @@ function findById(id) {
       where: {
         code: id
       }
-    })
-    .then(function (parameter) {
-      return parameter;
     });
 }
 
@@ -37,10 +31,8 @@ function update(id, entity) {
     .then(function (parameter) {
       if (parameter !== null) {
         return parameter.update(entity);
-      } else {
-        return Q.when();
       }
-    }).then(function (parameter) {
-      return parameter;
+        return Q.when();
+
     });
 }

@@ -19,7 +19,6 @@ router.put('/:heaterMode_id', updateHeaterMode);
 //Delete a HeaterMode
 router.delete('/:heaterMode_id', deleteHeaterMode);
 
-
 module.exports = router;
 
 //---------------------------
@@ -42,9 +41,9 @@ function createHeaterMode(req, res, next) {
   req.checkBody('max', 'Invalid max').notEmpty().isInt();
 
   // SANITIZATION
-/*  req.sanitizeBody('label').toBoolean();
-  req.sanitizeBody('order').toBoolean();
-  req.sanitizeBody('max').toBoolean();*/
+  /*  req.sanitizeBody('label').toBoolean();
+   req.sanitizeBody('order').toBoolean();
+   req.sanitizeBody('max').toBoolean();*/
 
   var errors = req.validationErrors();
   if (errors) {
@@ -66,7 +65,7 @@ function findHeaterModeById(req, res, next) {
   req.checkParams('heaterMode_id', 'Invalid id').notEmpty().isInt();
 
   // SANITIZATION
-/*  req.sanitizeParams('heaterMode_id').toBoolean();*/
+  /*  req.sanitizeParams('heaterMode_id').toBoolean();*/
 
   var errors = req.validationErrors();
   if (errors) {
@@ -75,10 +74,10 @@ function findHeaterModeById(req, res, next) {
   }
 
   models.HeaterMode.find({
-    where: {
-      id: req.params.heaterMode_id
-    }
-  })
+      where: {
+        id: req.params.heaterMode_id
+      }
+    })
     .then(function (heaterMode) {
       if (heaterMode !== null) {
         res.send(heaterMode);
@@ -99,10 +98,10 @@ function updateHeaterMode(req, res, next) {
   req.checkBody('max', 'Invalid max').notEmpty().isInt();
 
   // SANITIZATION
-/*  req.sanitizeParams('id').toBoolean();
-  req.sanitizeBody('label').toBoolean();
-  req.sanitizeBody('order').toBoolean();
-  req.sanitizeBody('max').toBoolean();*/
+  /*  req.sanitizeParams('id').toBoolean();
+   req.sanitizeBody('label').toBoolean();
+   req.sanitizeBody('order').toBoolean();
+   req.sanitizeBody('max').toBoolean();*/
 
   var errors = req.validationErrors();
   if (errors) {
@@ -110,24 +109,22 @@ function updateHeaterMode(req, res, next) {
     return;
   }
 
-
+  var heaterMode;
   models.HeaterMode.find({
-    where: {
-      id: req.params.heaterMode_id
-    }
-  })
-    .then(function (heaterMode) {
+      where: {
+        id: req.params.heaterMode_id
+      }
+    })
+    .then(function (entity) {
+      heaterMode = entity;
       if (heaterMode !== null) {
-        heaterMode.update({label: req.body.label, order: req.body.order, max: req.body.max})
-          .then(function () {
-            res.send(heaterMode);
-          })
-          .catch(function (error) {
-            next(error);
-          });
+        return heaterMode.update({label: req.body.label, order: req.body.order, max: req.body.max});
       } else {
         res.status(204).end();
       }
+    })
+    .then(function () {
+      res.send(heaterMode);
     })
     .catch(function (error) {
       next(error);
@@ -139,7 +136,7 @@ function deleteHeaterMode(req, res, next) {
   req.checkParams('heaterMode_id', 'Invalid id').notEmpty().isInt();
 
   // SANITIZATION
-/*  req.sanitizeParams('heaterMode_id').toBoolean();*/
+  /*  req.sanitizeParams('heaterMode_id').toBoolean();*/
 
   var errors = req.validationErrors();
   if (errors) {
@@ -148,10 +145,10 @@ function deleteHeaterMode(req, res, next) {
   }
 
   models.HeaterMode.destroy({
-    where: {
-      id: req.params.heaterMode_id
-    }
-  })
+      where: {
+        id: req.params.heaterMode_id
+      }
+    })
     .then(function (affectedRows) {
       if (affectedRows === 0) {
         res.status(204).end();

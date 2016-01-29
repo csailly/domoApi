@@ -18,7 +18,5 @@ function findByLogin(login) {
     where: {
       login: login
     }
-  }).then(function (credentials) {
-    return credentials;
   });
 }

@@ -16,15 +16,9 @@ module.exports = {
 //---------------------------
 
 function setForced(order) {
-  var promise1 = parameterDao.update('POELE_MARCHE_FORCEE', {value: (order ? "TRUE" : "FALSE")})
-    .then(function (updatedEntity) {
-      return updatedEntity;
-    });
+  var promise1 = parameterDao.update('POELE_MARCHE_FORCEE', {value: (order ? "TRUE" : "FALSE")});
 
-  var promise2 = parameterDao.update("POELE_ARRET_FORCE", {value: (order ? "FALSE" : "TRUE")})
-    .then(function (updatedEntity) {
-      return updatedEntity;
-    });
+  var promise2 = parameterDao.update("POELE_ARRET_FORCE", {value: (order ? "FALSE" : "TRUE")});
 
   return Q.allSettled([promise1, promise2])
     .spread(function (diskVal, cloudVal) {
@@ -34,24 +28,15 @@ function setForced(order) {
 }
 
 function setManual(start) {
-  return parameterDao.update('ORDRE_MANU', {value: (start ? "ON" : "OFF")})
-    .then(function (updatedEntity) {
-      return updatedEntity;
-    });
+  return parameterDao.update('ORDRE_MANU', {value: (start ? "ON" : "OFF")});
 }
 
 function updateForcedSetPointTemp(temp) {
-  return parameterDao.update('TEMP_CONSIGNE_MARCHE_FORCEE', {value: temp})
-    .then(function (updatedEntity) {
-      return updatedEntity;
-    });
+  return parameterDao.update('TEMP_CONSIGNE_MARCHE_FORCEE', {value: temp});
 }
 
 function updateForcedMaxTemp(temp) {
-  return parameterDao.update('TEMP_MAXI_MARCHE_FORCEE', {value: temp})
-    .then(function (updatedEntity) {
-      return updatedEntity;
-    });
+  return parameterDao.update('TEMP_MAXI_MARCHE_FORCEE', {value: temp});
 }
 
 function updateConfiguration(configValue) {
@@ -68,15 +53,9 @@ function updateConfiguration(configValue) {
 }
 
 function getConfiguration() {
-  return parameterDao.findById('POELE_CONFIG')
-    .then(function (parameter) {
-      return parameter;
-    });
+  return parameterDao.findById('POELE_CONFIG');
 }
 
 function getState() {
-  return parameterDao.findById('POELE_ETAT')
-    .then(function (parameter) {
-      return parameter;
-    });
+  return parameterDao.findById('POELE_ETAT');
 }
