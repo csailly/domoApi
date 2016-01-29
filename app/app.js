@@ -5,8 +5,8 @@
 
 // call the packages we need
 var express = require('express');        // call express
-var cors = require('cors');
-var app = express();                 // define our app using express
+//var cors = require('cors');
+var app = exports.app = express();                 // define our app using express
 var bodyParser = require('body-parser');
 var compress = require('compression');
 var expressValidator = require('express-validator');
@@ -51,13 +51,12 @@ app.use(expressValidator({
 // MIDDLEWARE
 // =============================================================================
 // middleware to use for all requests
-app.use(require('./app/middlewares/logger'));
+app.use(require('./middlewares/logger'));
 
 
 // ROUTES FOR OUR API
 // =============================================================================
-var routes = require('./app/routes');
-
+var routes = require('./routes');
 
 //All routes are prefixed with /api/vx
 app.use('/api/v1/account', routes.account);
@@ -82,9 +81,9 @@ app.get('*', function (req, res) {
 
 // ERRORS HANDLING
 // =============================================================================
-app.use(require('./app/middlewares/logErrors'));
-app.use(require('./app/middlewares/clientErrorHandler'));
-app.use(require('./app/middlewares/errorHandler'));
+app.use(require('./middlewares/logErrors'));
+app.use(require('./middlewares/clientErrorHandler'));
+app.use(require('./middlewares/errorHandler'));
 
 // START THE SERVER
 // =============================================================================

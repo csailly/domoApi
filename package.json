@@ -36,6 +36,13 @@
     "yaml-config": "^0.3.0"
   },
   "devDependencies": {
-    "gulp-nodemon": "^2.0.4"
+    "chai": "^3.5.0",
+    "gulp": "^3.9.0",
+    "gulp-istanbul": "^0.10.3",
+    "gulp-mocha": "^2.2.0",
+    "gulp-nodemon": "^2.0.4",
+    "mocha": "^2.4.5",
+    "supertest": "^1.1.0",
+    "wrench": "^1.5.8"
   }
 }
