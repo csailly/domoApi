@@ -6,7 +6,7 @@
 // call the packages we need
 var express = require('express');        // call express
 //var cors = require('cors');
-var app = exports.app = express();                 // define our app using express
+var app = require('express')();// define our app using express
 var bodyParser = require('body-parser');
 var compress = require('compression');
 var expressValidator = require('express-validator');
@@ -91,3 +91,5 @@ var port = process.env.PORT || config.server.port || 8080;        // set our por
 app.listen(port);
 console.log('Magic happens on port ' + port);
 console.log('Environment ' + app.get('env'));
+
+module.exports = {app: app}; // for testing
