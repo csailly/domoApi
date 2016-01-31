@@ -1,30 +1,32 @@
 'use strict';
 
-var models = require('../models');
 var express = require('express');
 var router = express.Router();
 
+var heaterModeService = require('../services/heaterMode.service.js');
+
+
 //Get all HeaterMode
-router.get('/', findAllHeaterMode);
+router.get('/', findAll);
 
 //Create a HeaterMode
-router.post('/', createHeaterMode);
+router.post('/', create);
 
 //Get a single HeaterMode
-router.get('/:heaterMode_id', findHeaterModeById);
+router.get('/:heaterMode_id', findById);
 
 //Update a HeaterMode
-router.put('/:heaterMode_id', updateHeaterMode);
+router.put('/:heaterMode_id', update);
 
 //Delete a HeaterMode
-router.delete('/:heaterMode_id', deleteHeaterMode);
+router.delete('/:heaterMode_id', _delete);
 
 module.exports = router;
 
 //---------------------------
 
-function findAllHeaterMode(req, res, next) {
-  models.HeaterMode.findAll()
+function findAll(req, res, next) {
+  heaterModeService.findAll()
     .then(function (heaterModes) {
       res.send(heaterModes);
     })
@@ -33,8 +35,7 @@ function findAllHeaterMode(req, res, next) {
     });
 }
 
-function createHeaterMode(req, res, next) {
-
+function create(req, res, next) {
   // VALIDATION
   req.checkBody('label', 'Invalid label').notEmpty().isAlphanumeric();
   req.checkBody('order', 'Invalid order').notEmpty().isInt();
@@ -51,7 +52,7 @@ function createHeaterMode(req, res, next) {
     return;
   }
 
-  models.HeaterMode.create({label: req.body.label, order: req.body.order, max: req.body.max})
+  heaterModeService.create({label: req.body.label, order: req.body.order, max: req.body.max})
     .then(function (heaterMode) {
       res.status(201).send(heaterMode);
     })
@@ -60,7 +61,7 @@ function createHeaterMode(req, res, next) {
     });
 }
 
-function findHeaterModeById(req, res, next) {
+function findById(req, res, next) {
   // VALIDATION
   req.checkParams('heaterMode_id', 'Invalid id').notEmpty().isInt();
 
@@ -73,11 +74,7 @@ function findHeaterModeById(req, res, next) {
     return;
   }
 
-  models.HeaterMode.find({
-      where: {
-        id: req.params.heaterMode_id
-      }
-    })
+  heaterModeService.findById(req.params.heaterMode_id)
     .then(function (heaterMode) {
       if (heaterMode !== null) {
         res.send(heaterMode);
@@ -90,7 +87,7 @@ function findHeaterModeById(req, res, next) {
     });
 }
 
-function updateHeaterMode(req, res, next) {
+function update(req, res, next) {
   // VALIDATION
   req.checkParams('heaterMode_id', 'Invalid id').notEmpty().isInt();
   req.checkBody('label', 'Invalid label').notEmpty().isAlphanumeric();
@@ -109,29 +106,25 @@ function updateHeaterMode(req, res, next) {
     return;
   }
 
-  var heaterMode;
-  models.HeaterMode.find({
-      where: {
-        id: req.params.heaterMode_id
-      }
+  heaterModeService.update({
+      id: req.params.heaterMode_id,
+      label: req.body.label,
+      order: req.body.order,
+      max: req.body.max
     })
-    .then(function (entity) {
-      heaterMode = entity;
+    .then(function (heaterMode) {
       if (heaterMode !== null) {
-        return heaterMode.update({label: req.body.label, order: req.body.order, max: req.body.max});
+        res.send(heaterMode);
       } else {
         res.status(204).end();
       }
-    })
-    .then(function () {
-      res.send(heaterMode);
     })
     .catch(function (error) {
       next(error);
     });
 }
 
-function deleteHeaterMode(req, res, next) {
+function _delete(req, res, next) {
   // VALIDATION
   req.checkParams('heaterMode_id', 'Invalid id').notEmpty().isInt();
 
@@ -144,18 +137,13 @@ function deleteHeaterMode(req, res, next) {
     return;
   }
 
-  models.HeaterMode.destroy({
-      where: {
-        id: req.params.heaterMode_id
-      }
-    })
+  heaterModeService.delete(req.params.heaterMode_id)
     .then(function (affectedRows) {
       if (affectedRows === 0) {
         res.status(204).end();
       } else {
         res.status(200).end();
       }
-
     })
     .catch(function (error) {
       next(error);

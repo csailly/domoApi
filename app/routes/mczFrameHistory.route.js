@@ -1,8 +1,9 @@
 'use strict';
 
-var models = require('../models');
 var express = require('express');
 var router = express.Router();
+
+var mczFrameHistoryService = require('../services/mczFrameHistory.service');
 
 router.get('/', findAll);
 
@@ -10,9 +11,8 @@ module.exports = router;
 
 //---------------------------
 
-function findAll(req, res, next){
-  models.MczFrameHistory.removeAttribute('id');
-  models.MczFrameHistory.findAll()
+function findAll(req, res, next) {
+  mczFrameHistoryService.findAll()
     .then(function (mczFrameHistory) {
       res.send(mczFrameHistory);
     })
