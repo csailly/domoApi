@@ -2,14 +2,14 @@
 
 process.env.NODE_ENV = 'test';
 
-var request = require('supertest'),
-  expect = require("chai").expect;
+var request = require('supertest');
+var expect = require("chai").expect;
 
 
 describe('Server', function () {
 
-  var server,
-    app;
+  var server;
+  var app;
 
   before(function (done) {
     server = require('./app.js');

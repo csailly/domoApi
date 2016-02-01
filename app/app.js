@@ -5,7 +5,8 @@
 
 // call the packages we need
 //var cors = require('cors');
-var app = require('express')();// define our app using express
+var express = require('express');
+var app = express();// define our app using express
 var bodyParser = require('body-parser');
 var compress = require('compression');
 var expressValidator = require('express-validator');
@@ -52,10 +53,9 @@ app.use(expressValidator({
 // middleware to use for all requests
 app.use(require('./middlewares/logger'));
 
-
 // ROUTES FOR OUR API
 // =============================================================================
-var routes = require('./routes');
+var routes = require('./routes')(express.Router());
 
 //All routes are prefixed with /api/vx
 app.use('/api/v1/account', routes.account);
