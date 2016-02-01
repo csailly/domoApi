@@ -5,7 +5,7 @@ var jshint = require('gulp-jshint');
 
 
 gulp.task('lint', function () {
-  gulp.src('./app/**/*.js')
+  gulp.src(paths.app + '/**/*.js')
     .pipe(jshint())
-    .pipe(jshint.reporter('default', { verbose: true }));
+    .pipe(jshint.reporter('default', {verbose: true}));
 });
