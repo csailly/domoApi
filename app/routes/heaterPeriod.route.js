@@ -43,12 +43,15 @@ function findAllHeaterPeriod(req, res, next) {
 
 function createHeaterPeriod(req, res, next) {
   // VALIDATION
-  req.checkBody('day', 'Invalid day').optional().isInt();
-  req.checkBody('startDate', 'Invalid startDate').optional().isDate();
-  req.checkBody('endDate', 'Invalid endDate').optional().isDate();
-  req.checkBody('startTime', 'Invalid startTime').notEmpty().isTime();
-  req.checkBody('endTime', 'Invalid endTime').notEmpty().isTime();
-  req.checkBody('modeId', 'Invalid modeId').notEmpty().isInt();
+  req.checkBody('day', 'Invalid format').optional().isInt();
+  req.checkBody('startDate', 'Invalid format').optional().isDate();
+  req.checkBody('endDate', 'Invalid format').optional().isDate();
+  req.checkBody('startTime', 'Mandatory').notEmpty();
+  req.checkBody('startTime', 'Invalid format').optional().isTime();
+  req.checkBody('endTime', 'Mandatory').notEmpty();
+  req.checkBody('endTime', 'Invalid endTime').optional().isTime();
+  req.checkBody('modeId', 'Mandatory').notEmpty();
+  req.checkBody('modeId', 'Invalid format').optional().isInt();
 
   var errors = req.validationErrors();
   if (errors) {
