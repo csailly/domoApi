@@ -1,16 +1,21 @@
 'use strict';
 
-var express = require('express');
-var router = express.Router();
-
 var accountService = require('../services/account.service');
 
-router.get('/',findAll);
-router.post('/authenticate', authenticate);
 
-module.exports = router;
+module.exports = function (router) {
+  router.use(logging);
+  router.get('/', findAll);
+  router.post('/authenticate', authenticate);
+  return router;
+};
 
 //---------------------------
+
+function logging(req, res, next){
+  console.log('Account route called : ', Date.now());
+  next();
+}
 
 function findAll(req, res, next) {
   accountService.findAll()
@@ -34,10 +39,10 @@ function authenticate(req, res, next) {
   }
 
   accountService.authenticate(req.body.login, req.body.password)
-    .then(function (isAuthenticate){
-      if (isAuthenticate){
+    .then(function (isAuthenticate) {
+      if (isAuthenticate) {
         res.status(200).end();
-      }else{
+      } else {
         res.status(401).end();
       }
     })
