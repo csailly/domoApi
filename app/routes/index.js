@@ -9,5 +9,5 @@ module.exports = function (router) {
     parameter: require('./parameter.route'),
     temperatureHistory: require('./temperatureHistory.route'),
     stove: require('./stove.route')
-  }
+  };
 };

@@ -27,8 +27,11 @@ app.use(bodyParser.json());
 // this line must be immediately after express.bodyParser()!
 app.use(expressValidator({
   customValidators: {
+    isDateTime: function (value) {
+      return moment(value, 'YYYY-MM-DD[T]HH:mm', true).isValid();
+    },
     isDate: function (value) {
-      return moment(value, 'YYYY-MM-DD[T]HH:mm:ss', true).isValid();
+      return moment(value, 'YYYY-MM-DD', true).isValid();
     },
     isTime: function (value) {
       return moment(value, 'HH:mm', true).isValid();

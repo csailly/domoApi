@@ -8,7 +8,7 @@ gulp.task('serve:dev', ['lint'], function () {
     script: paths.app + '/app.js',
     verbose: true,
     ext: 'js', tasks: ['lint'],
-    ignore: ['**/*spec.js', '.idea']
+    ignore: ['**/*spec.js']
   })
     .on('restart', function () {
       console.log('restarted!');
