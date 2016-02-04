@@ -27,7 +27,7 @@ app.use(bodyParser.json());
 app.use(expressValidator({
   customValidators: {
     isDate: function (value) {
-      return moment(value, ['DD/MM/YYYY', 'YYYYMMDD'], true).isValid();
+      return moment(value, 'YYYY-MM-DD[T]HH:mm:ss', true).isValid();
     },
     isTime: function (value) {
       return moment(value, 'HH:mm', true).isValid();

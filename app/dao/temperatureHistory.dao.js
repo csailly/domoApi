@@ -9,7 +9,6 @@ module.exports = {
 };
 
 //---------------------------
-
 function findAll() {
   models.TemperatureHistory.removeAttribute('id');
   return models.TemperatureHistory.findAll();
@@ -17,13 +16,16 @@ function findAll() {
 
 function findBySensorFromDate(sensorId, date){
   models.TemperatureHistory.removeAttribute('id');
-  return models.TemperatureHistory.find({
+  return models.TemperatureHistory.findAll({
       where: {
         sensorId: sensorId,
         date: {
           $gte: date
         }
-      }
+      },
+    order: [
+      ['date', 'DESC'],
+    ]
     });
 }
 

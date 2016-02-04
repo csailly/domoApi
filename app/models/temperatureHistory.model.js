@@ -4,7 +4,7 @@ module.exports = function(sequelize, DataTypes) {
   return sequelize.define('TemperatureHistory', {
     date: {
       field: 'date',
-      type: DataTypes.DATE,
+      type: DataTypes.TEXT,
       allowNull: true
     },
     time: {

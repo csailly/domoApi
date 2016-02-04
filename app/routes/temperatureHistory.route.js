@@ -38,16 +38,20 @@ function create(req, res, next) {
     return;
   }
 
-  var date = moment(req.body.date + "+0000", 'YYYYMMDDZ');
+  var date = moment(req.body.date, 'YYYY-MM-DD[T]HH:mm:ss', true).format();
 
   temperatureHistoryService.create({
-      date: date.utc().toDate(),
+      date: date,
       time: req.body.time,
       sensorId: req.body.sensorId,
       temp: req.body.temp
     })
     .then(function (temperatureHistory) {
-      res.status(201).send(temperatureHistory);
+      if (temperatureHistory) {
+        res.status(201).end();
+      } else {
+        res.status(500).end();
+      }
     })
     .catch(function (error) {
       next(error);
@@ -65,9 +69,9 @@ function findBySensorFromDate(req, res, next) {
     return;
   }
 
-  var date = moment(req.params.startDate + "+0000", 'YYYYMMDDZ');
+  var date = moment(req.params.startDate, 'YYYY-MM-DD[T]HH:mm:ss', true).format();
 
-  temperatureHistoryService.findBySensorFromDate(req.params.sensorId, date.utc().toDate())
+  temperatureHistoryService.findBySensorFromDate(req.params.sensorId, date)
     .then(function (temperature) {
       if (temperature !== null) {
         res.send(temperature);
