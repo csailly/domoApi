@@ -43,15 +43,17 @@ function findAllHeaterPeriod(req, res, next) {
 
 function createHeaterPeriod(req, res, next) {
   // VALIDATION
-  req.checkBody('day', 'Invalid format').optional().isInt();
-  req.checkBody('startDate', 'Invalid format').optional().isDate();
-  req.checkBody('endDate', 'Invalid format').optional().isDate();
+  req.checkBody('idProfil', 'Mandatory').notEmpty();
+  req.checkBody('idProfil', 'Invalid format').optional().isInt();
+  req.checkBody('idMode', 'Mandatory').notEmpty();
+  req.checkBody('idMode', 'Invalid format').optional().isInt();
   req.checkBody('startTime', 'Mandatory').notEmpty();
   req.checkBody('startTime', 'Invalid format').optional().isTime();
   req.checkBody('endTime', 'Mandatory').notEmpty();
   req.checkBody('endTime', 'Invalid endTime').optional().isTime();
-  req.checkBody('modeId', 'Mandatory').notEmpty();
-  req.checkBody('modeId', 'Invalid format').optional().isInt();
+  req.checkBody('idType', 'Invalid format').optional();
+  req.checkBody('days', 'Invalid format').optional();
+  req.checkBody('date', 'Invalid format').optional().isDate();
 
   var errors = req.validationErrors();
   if (errors) {
@@ -65,6 +67,10 @@ function createHeaterPeriod(req, res, next) {
     res.status(400).send({message: 'There have been validation errors: ', errors: errors});
     return;
   }
+
+  // SANITIZATION
+  req.sanitizeBody('idProfil').toInt();
+  req.sanitizeBody('idMode').toInt();
 
   //All seems ok, go to create !!
   heaterPeriodService.create(buildEntityFromRequest(req))
@@ -175,7 +181,7 @@ function findCurrent(req, res, next) {
 }
 
 function updateCurrentMode(req, res, next) {
-  heaterPeriodService.setCurrentMode(req.body.modeId)
+  heaterPeriodService.setCurrentMode(req.body.idMode)
     .then(function (heaterPeriod) {
       res.send(heaterPeriod);
     })
@@ -186,18 +192,16 @@ function updateCurrentMode(req, res, next) {
 
 function buildEntityFromRequest(req) {
   var entity = {
+    idProfil: req.body.idProfil,
+    idMode: req.body.idMode,
+    idType: req.body.idType,
     startTime: req.body.startTime,
-    endTime: req.body.endTime,
-    modeId: req.body.modeId
+    endTime: req.body.endTime
   };
-  if (req.body.day) {
-    entity.day = req.body.day;
+  if (req.body.idType === 'DAY') {
+    entity.days = req.body.days;
   } else {
-    var startDate = moment(req.body.startDate + "+0000", ['DD/MM/YYYYZ', 'YYYYMMDDZ']);
-    entity.startDate = startDate.utc().format();
-
-    var endDate = moment(req.body.endDate + "+0000", ['DD/MM/YYYYZ', 'YYYYMMDDZ']);
-    entity.endDate = endDate.utc().format();
+    entity.date = moment(req.body.date).format('YYYY-MM-DD');
   }
   return entity;
 }
@@ -221,38 +225,25 @@ function validateEntityFromRequest(req) {
   }
 
   //Check Dates
-  if (!req.body.day) {
-    if (!req.body.startDate || !req.body.endDate) {
+  if (req.body.idType === 'DAY') {
+    if(!req.body.days){
       errors = errors || [];
       errors.push({
-        "param": "startDate",
-        "msg": "either day or startDate and endDate must not be empty",
-        "value": req.body.startDate
+        "param": "days",
+        "msg": "Days must be filled",
+        "value": req.body.days
       });
-      errors.push({
-        "param": "endDate",
-        "msg": "either day or startDate and endDate must not be empty",
-        "value": req.body.endDate
-      });
-      errors.push({
-        "param": "day",
-        "msg": "either day or startDate and endDate must not be empty",
-        "value": req.body.day
-      });
-
-    } else if (moment(req.body.endDate, ['DD/MM/YYYY', 'YYYYMMDD']).diff(moment(req.body.startDate, ['DD/MM/YYYY', 'YYYYMMDD'])) < 0) {
+    }
+  }else{
+    if (!req.body.date) {
       errors = errors || [];
       errors.push({
-        "param": "startDate",
-        "msg": "endDate must be posterior to startDate",
-        "value": req.body.startDate + " - " + req.body.endDate
-      });
-      errors.push({
-        "param": "endDate",
-        "msg": "endDate must be posterior to startDate",
-        "value": req.body.startDate + " - " + req.body.endDate
+        "param": "date",
+        "msg": "Date must be filled",
+        "value": req.body.date
       });
     }
   }
+
   return errors;
 }

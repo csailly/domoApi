@@ -1,6 +1,5 @@
 'use strict';
 
-var Q = require('q');
 var heaterPeriodDao = require('../dao/heaterPeriod.dao');
 var moment = require('moment');
 
@@ -16,24 +15,20 @@ module.exports = {
 
 
 //---------------------------
-function findById(idHeaterPeriod) {
-  return heaterPeriodDao.findById(idHeaterPeriod)
-    .then(function (heaterPeriod) {
-      return heaterPeriod;
-    });
+function findById(id) {
+  return heaterPeriodDao.findById(id);
 }
-
 
 function create(entity) {
   return heaterPeriodDao.create(entity);
 }
 
-function update(idHeaterPeriod, entity) {
-  return heaterPeriodDao.update(idHeaterPeriod, entity);
+function update(id, entity) {
+  return heaterPeriodDao.update(id, entity);
 }
 
-function deletePeriod(idHeaterPeriod) {
-  return heaterPeriodDao.delete(idHeaterPeriod);
+function deletePeriod(id) {
+  return heaterPeriodDao.delete(id);
 }
 
 function findAll() {
@@ -41,34 +36,33 @@ function findAll() {
 }
 
 function findCurrent() {
-  return heaterPeriodDao.findCurrent();
+  return heaterPeriodDao.findCurrentByProfilId(-1);
 }
 
-function setCurrentMode(modeId) {
-  var dateNow = moment().hour(0).minute(0).second(0).millisecond(0).format('YYYYMMDD');
-  dateNow = moment(dateNow + "+0000", 'YYYYMMDDZ').utc().format();
-  var timeNow = moment().format("HH:mm");
+function setCurrentMode(idMode) {
+  var now = {
+    date: moment().hour(0).minute(0).second(0).millisecond(0).format('YYYY-MM-DD'),
+    time: moment().format("HH:mm"),
+    day: moment().day()
+  };
 
   var currentHeaterPeriod;
   return findCurrent()
     .then(function (current) {
       currentHeaterPeriod = current;
-      if (!currentHeaterPeriod.day || currentHeaterPeriod.startDate === currentHeaterPeriod.endDate) {
-        //1° update current period to end now
-        return update(currentHeaterPeriod.id, {endTime: timeNow});
+      if (currentHeaterPeriod.idType === 'DATE') {
+        //1° update current period
+        return update(currentHeaterPeriod.id, {idMode: idMode});
       } else {
-        return Q.when();
+        //2° create new period starting now and ending at the currentPeriod end
+        return create({
+          idProfil : currentHeaterPeriod.idProfil,
+          idMode: idMode,
+          idType: 'DATE',
+          date: now.date,
+          startTime: now.time,
+          endTime: currentHeaterPeriod.endTime
+        });
       }
-    })
-    //2° create new period starting now and ending at the currentPeriod end
-    .then(function () {
-      return create({
-        startDate: dateNow,
-        endDate: dateNow,
-        startTime: timeNow,
-        endTime: currentHeaterPeriod.endTime,
-        modeId: modeId
-      });
     });
-
 }

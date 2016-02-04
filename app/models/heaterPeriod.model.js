@@ -1,45 +1,44 @@
 'use strict';
 
-module.exports = function(sequelize, DataTypes) {
+module.exports = function (sequelize, DataTypes) {
   return sequelize.define('HeaterPeriod', {
-    id: {
-      type: DataTypes.INTEGER,
-      allowNull: false,
-      primaryKey: true,
-      autoIncrement: true
+      id: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        primaryKey: true,
+        autoIncrement: true
+      },
+      idProfil: {
+        type: DataTypes.INTEGER,
+        allowNull: false
+      },
+      idMode: {
+        type: DataTypes.INTEGER,
+        allowNull: false
+      },
+      idType: {
+        type: DataTypes.TEXT,
+        allowNull: false
+      },
+      startTime: {
+        type: DataTypes.TEXT,
+        allowNull: false
+      },
+      endTime: {
+        type: DataTypes.TEXT,
+        allowNull: false
+      },
+      days: {
+        type: DataTypes.TEXT,
+        allowNull: true
+      },
+      date: {
+        type: DataTypes.TEXT,
+        allowNull: true
+      }
     },
-    day: {
-      field: 'jour',
-      type: DataTypes.INTEGER,
-      allowNull: true
-    },
-    startDate: {
-      field: 'dateDebut',
-      type: DataTypes.DATEONLY,
-      allowNull: true
-    },
-    endDate: {
-      field: 'dateFin',
-      type: DataTypes.DATEONLY,
-      allowNull: true
-    },
-    startTime: {
-      field: 'heureDebut',
-      type: DataTypes.TIME,
-      allowNull: true
-    },
-    endTime: {
-      field: 'heureFin',
-      type: DataTypes.TIME,
-      allowNull: true
-    },
-    modeId: {
-      type: DataTypes.INTEGER,
-      allowNull: true
-    }
-  },
-  {
-    timestamps: false,
-    tableName: 'periode'
-  });
+    {
+      timestamps: false,
+      tableName: 'heaterPeriod'
+    });
 };

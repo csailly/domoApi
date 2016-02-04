@@ -9,27 +9,27 @@ module.exports = {
   update: update,
   delete: deletePeriod,
   findAll: findAll,
-  findCurrent: findCurrent,
+  findCurrentByProfilId: findCurrentByProfilId,
   findById: findById
 };
 
 //---------------------------
-function findById(idHeaterPeriod) {
+function findById(id) {
   return models.HeaterPeriod.find({
-      where: {
-        id: idHeaterPeriod
-      }
-    });
+    where: {
+      id: id
+    }
+  });
 }
 
 function create(entity) {
   return models.HeaterPeriod.create(entity);
 }
 
-function update(idHeaterPeriod, entity) {
+function update(id, entity) {
   return models.HeaterPeriod.find({
       where: {
-        id: idHeaterPeriod
+        id: id
       }
     })
     .then(function (heaterPeriod) {
@@ -40,54 +40,71 @@ function update(idHeaterPeriod, entity) {
     });
 }
 
-function deletePeriod(idHeaterPeriod) {
+function deletePeriod(id) {
   return models.HeaterPeriod.destroy({
-      where: {
-        id: idHeaterPeriod
-      }
-    });
+    where: {
+      id: id
+    }
+  });
 }
 
 function findAll() {
   return models.HeaterPeriod.findAll();
 }
 
-function findCurrent() {
-  var dateNow = moment().hour(0).minute(0).second(0).millisecond(0).format('YYYYMMDD');
-  dateNow = moment(dateNow + "+0000", 'YYYYMMDDZ').utc().format();
-  var timeNow = moment().format("HH:mm");
+function findCurrentByProfilId(idProfil) {
+  var now = {
+    date: moment().hour(0).minute(0).second(0).millisecond(0).format('YYYY-MM-DD'),
+    time: moment().format("HH:mm"),
+    day: moment().day().toString()
+  };
 
   return models.HeaterPeriod.find({
-      where: {
+    where: {
+      $and: {
+        idProfil: idProfil,
         $or: [
           //Period at the current date
           {
-            startDate: {
-              $lte: dateNow
-            },
-            endDate: {
-              $gte: dateNow
-            },
+            idType: 'DATE',
+            date: now.date,
             startTime: {
-              $lte: timeNow
+              $lte: now.time
             },
             endTime: {
-              $gte: timeNow
+              $gte: now.time
             }
           },
           //Period at the current day
           {
-            day: moment().day(),
+            idType: 'DAY',
+            days: now.day,
             startTime: {
-              $lte: timeNow
+              $lte: now.time
             },
             endTime: {
-              $gte: timeNow
+              $gte: now.time
             }
-          }]
-      },
-      //Sort to get period with current date first
-      //@see https://github.com/sequelize/sequelize/issues/4810
-      order: [['dateDebut', 'DESC'], ['dateFin', 'ASC']]
-    });
+          },
+          //Period including the current day
+          {
+            idType: 'DAY',
+            days: {
+              $like: '%' + now.day + '%'
+            },
+            startTime: {
+              $lte: now.time
+            },
+            endTime: {
+              $gte: now.time
+            }
+          }
+        ]
+      }
+    },
+    order: [
+      ['date', 'DESC'],
+      ['days', 'DESC']
+    ]
+  });
 }
