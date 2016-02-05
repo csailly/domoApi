@@ -1,6 +1,6 @@
 'use strict';
 
-var accountDao = require('../dao/account.dao')();
+var accountDao = require('../dao/account.dao');
 
 module.exports = {
   findAll: findAll,
@@ -9,7 +9,6 @@ module.exports = {
 
 //---------------------------
 function findAll() {
-  console.log(accountDao);
   return accountDao.findAll();
 }
 
