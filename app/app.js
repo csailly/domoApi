@@ -28,7 +28,7 @@ app.use(bodyParser.json());
 app.use(expressValidator({
   customValidators: {
     isDateTime: function (value) {
-      return moment(value, 'YYYY-MM-DD[T]HH:mm', true).isValid();
+      return moment(value, 'YYYY-MM-DD HH:mm', true).isValid();
     },
     isDate: function (value) {
       return moment(value, 'YYYY-MM-DD', true).isValid();
@@ -64,6 +64,7 @@ var routes = require('./routes')(express.Router());
 app.use('/api/v1/account', routes.account);
 app.use('/api/v1/heaterMode', routes.heaterMode);
 app.use('/api/v1/heaterPeriod', routes.heaterPeriod);
+app.use('/api/v1/profil', routes.profil);
 app.use('/api/v1/mczFrameHistory', routes.mczFrameHistory);
 app.use('/api/v1/parameter', routes.parameter);
 app.use('/api/v1/temperatureHistory', routes.temperatureHistory);

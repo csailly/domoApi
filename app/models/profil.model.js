@@ -24,11 +24,13 @@ function profil(sequelize, DataTypes){
       },
       isDefault: {
         type: DataTypes.BOOLEAN,
-        allowNull: false
+        allowNull: false,
+        defaultValue: false
       },
       isActive: {
         type: DataTypes.BOOLEAN,
-        allowNull: false
+        allowNull: false,
+        defaultValue: false
       }
     },
     {

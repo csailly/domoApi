@@ -5,6 +5,7 @@ module.exports = function (router) {
     account: require('./account.route')(router),
     heaterMode: require('./heaterMode.route'),
     heaterPeriod: require('./heaterPeriod.route'),
+    profil: require('./profil.route'),
     mczFrameHistory: require('./mczFrameHistory.route'),
     parameter: require('./parameter.route'),
     temperatureHistory: require('./temperatureHistory.route'),

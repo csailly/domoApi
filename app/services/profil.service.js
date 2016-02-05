@@ -1,24 +1,20 @@
 'use strict';
 
 var profilDao = require('../dao/profil.dao');
-var moment = require('moment');
 
 module.exports = {
   create: create,
-  update: update,
   delete: deletePeriod,
   findAll: findAll,
-  findCurrent: findCurrent
+  findCurrent: findCurrent,
+  activate: activate,
+  update: update
 };
 
 
 //---------------------------
 function create(entity) {
   return profilDao.create(entity);
-}
-
-function update(id, entity) {
-  return profilDao.update(id, entity);
 }
 
 function deletePeriod(id) {
@@ -31,4 +27,13 @@ function findAll() {
 
 function findCurrent() {
   return profilDao.findCurrent();
+}
+
+function activate(id) {
+  return profilDao.activate(id);
+}
+
+
+function update(entity){
+  return profilDao.update(entity);
 }

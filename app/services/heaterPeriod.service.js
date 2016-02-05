@@ -1,7 +1,9 @@
 'use strict';
 
 var heaterPeriodDao = require('../dao/heaterPeriod.dao');
+var profilDao = require('../dao/profil.dao');
 var moment = require('moment');
+var Q = require('q');
 
 module.exports = {
   create: create,
@@ -36,7 +38,14 @@ function findAll() {
 }
 
 function findCurrent() {
-  return heaterPeriodDao.findCurrentByProfilId(-1);
+  return profilDao.findCurrent()
+    .then(function(currentProfil){
+      if(currentProfil){
+        return heaterPeriodDao.findCurrentByProfilId(currentProfil.id);
+      }else{
+        return Q.when();
+      }
+    });
 }
 
 function setCurrentMode(idMode) {
