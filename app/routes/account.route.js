@@ -1,8 +1,13 @@
 'use strict';
 
+/**
+ * Module dependencies.
+ */
 var accountService = require('../services/account.service');
 
-
+/**
+ * Module exposures.
+ */
 module.exports = function (router) {
   router.use(logging);
   router.get('/', findAll);
@@ -11,7 +16,9 @@ module.exports = function (router) {
 };
 
 //---------------------------
-
+/**
+ * Module exposures implementation .
+ */
 function logging(req, res, next){
   console.log('Account route called : ', Date.now());
   next();

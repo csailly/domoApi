@@ -5,13 +5,18 @@
  */
 var models = require('../models');
 
+/**
+ * Module exposures.
+ */
 module.exports = {
   findAll: findAll,
   findByLogin: findByLogin
 };
 
 //----------------------------
-
+/**
+ * Module exposures implementation .
+ */
 function findAll() {
   return models.Account.findAll();
 }
