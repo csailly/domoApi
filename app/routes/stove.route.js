@@ -187,11 +187,11 @@ function updateConfiguration(req, res, next) {
     });
 }
 
-function readConfiguration(res, next) {
+function readConfiguration(req, res, next) {
   stoveService.getConfiguration()
     .then(function (parameter) {
       if (parameter !== null) {
-        res.send(parameter);
+        res.send({value: parameter.value});
       } else {
         res.status(204).end();
       }

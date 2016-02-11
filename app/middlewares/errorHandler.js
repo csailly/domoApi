@@ -1,8 +1,8 @@
 'use strict';
 
-function errorHandler(err, req, res) {
-  console.error('lastErrors response');
-  res.status(500).send(err.toString());
+function errorHandler(err, req, res, next) {
+  console.error('----------errorHandler----------');
+  res.status(500).send({error: err.toString()});
 }
 
 module.exports = errorHandler;

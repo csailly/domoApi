@@ -11,11 +11,13 @@ var bodyParser = require('body-parser');
 var compress = require('compression');
 var expressValidator = require('express-validator');
 var moment = require('moment');
-
+var cors = require('cors');
 var config = require('yaml-config').readConfig('./app/config/app.yml');
 
 //Use CORS @see https://github.com/expressjs/cors
-//app.use(cors());
+var corsOptions = {
+  origin: 'http://localhost:3000'
+};
 
 //Configure compression for response
 app.use(compress());
@@ -61,14 +63,14 @@ app.use(require('./middlewares/logger'));
 var routes = require('./routes')(express.Router());
 
 //All routes are prefixed with /api/vx
-app.use('/api/v1/account', routes.account);
-app.use('/api/v1/heaterMode', routes.heaterMode);
-app.use('/api/v1/heaterPeriod', routes.heaterPeriod);
-app.use('/api/v1/profil', routes.profil);
-app.use('/api/v1/mczFrameHistory', routes.mczFrameHistory);
-app.use('/api/v1/parameter', routes.parameter);
-app.use('/api/v1/temperatureHistory', routes.temperatureHistory);
-app.use('/api/v1/stove', routes.stove);
+app.use('/api/v1/account', cors(corsOptions), routes.account);
+app.use('/api/v1/heaterMode', cors(corsOptions), routes.heaterMode);
+app.use('/api/v1/heaterPeriod', cors(corsOptions), routes.heaterPeriod);
+app.use('/api/v1/profil', cors(corsOptions), routes.profil);
+app.use('/api/v1/mczFrameHistory', cors(corsOptions), routes.mczFrameHistory);
+app.use('/api/v1/parameter', cors(corsOptions), routes.parameter);
+app.use('/api/v1/temperatureHistory', cors(corsOptions), routes.temperatureHistory);
+app.use('/api/v1/stove', cors(corsOptions), routes.stove);
 
 app.get('/infos', function (req, res) {
   res.status(200).send({
