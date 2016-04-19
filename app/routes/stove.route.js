@@ -5,9 +5,9 @@ var router = express.Router();
 var stoveService = require('../services/stove.service.js');
 
 router.put('/order', setOrder);
-router.put('/forcedStart/:order', setForcedStart);
-router.put('/forcedStop/:order', setForcedStop);
-router.put('/manual/:order', setManual);
+//router.put('/forcedStart/:order', setForcedStart);
+//router.put('/forcedStop/:order', setForcedStop);
+//router.put('/manual/:order', setManual);
 router.put('/forcedSetPoint', updateForcedSetPointTemp);
 router.put('/forcedMaxPoint', updateForcedMaxTemp);
 router.put('/configuration', updateConfiguration);
@@ -99,17 +99,19 @@ function setOrder(req, res, next) {
   var order = req.body.order;
 
   stoveService.getConfiguration().
-    then(function (config) {
-      if (config === 'AUTO') {
+    then(function (parameter) {
+      if (parameter.value === 'AUTO') {
         stoveService.setForced(order === 'on').then(function () {
           //TODO LAUNCH STOVE SCRIPT
           res.send('TODO LAUNCH STOVE SCRIPT');
         });
-      } else if (config === 'MANU') {
+      } else if (parameter.value === 'MANU') {
         stoveService.setManual(order === 'on').then(function () {
           //TODO LAUNCH STOVE SCRIPT
           res.send('TODO LAUNCH STOVE SCRIPT');
         });
+      } else {
+        res.status(204).end();
       }
     })
     .catch(function (error) {
@@ -201,7 +203,7 @@ function readConfiguration(req, res, next) {
     });
 }
 
-function readState(res, next) {
+function readState(req, res, next) {
   stoveService.getState()
     .then(function (parameter) {
       if (parameter !== null) {
